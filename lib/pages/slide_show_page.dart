@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:slideshow/models/slider_model.dart';
 import 'package:slideshow/widgets/dots_widget.dart';
 import 'package:slideshow/widgets/slide_widget.dart';
 
@@ -7,10 +9,13 @@ class SlideShowPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          children: const [Expanded(child: _Slides()), DotsWidget()],
+    return ChangeNotifierProvider(
+      create: (_) => SliderModel(),
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            children: const [Expanded(child: _Slides()), DotsWidget()],
+          ),
         ),
       ),
     );
@@ -32,6 +37,9 @@ class _SlidesState extends State<_Slides> {
     super.initState();
     pageViewController.addListener(() {
       print('Pagina actual: ${pageViewController.page}');
+      //actualizar el provider Slider model
+      Provider.of<SliderModel>(context, listen: false).currentPage =
+          pageViewController.page!;
     });
   }
 
